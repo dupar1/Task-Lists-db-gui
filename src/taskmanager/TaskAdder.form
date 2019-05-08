@@ -104,7 +104,7 @@
                       <Component id="btnAddEditList" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
                       <Component id="btnDeleteList" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="241" max="32767" attributes="0"/>
+                      <EmptySpace pref="199" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -219,6 +219,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSelectedListActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="((AbstractDocument)txtSelectedList.getDocument()).setDocumentFilter(new TaskAddFilter(Pattern.compile(&quot;[\\s]&quot;)));"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

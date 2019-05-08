@@ -25,12 +25,21 @@ public class LimitedDocFilter extends DocumentFilter {
 
     @Override
     public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-        Matcher matcher = regEx.matcher(text);
-        if ((fb.getDocument().getLength() + text.length()) <= maxCharLength && matcher.matches()) {
-            super.replace(fb, offset, length, text, attrs);
-        } else {
-            Toolkit.getDefaultToolkit().beep();
-        }
+        
+        Matcher matcher = regEx.matcher("placeholder"); 
+        if (text != null || text != "")
+            matcher= regEx.matcher(text);
+        
+            if ((fb.getDocument().getLength() + text.length()) <= maxCharLength && matcher.matches()) {
+                super.replace(fb, offset, length, text, attrs);
+            } else if((fb.getDocument().getLength() + text.length()) > maxCharLength && matcher.matches()){
+                super.replace(fb, offset, 1, text, attrs);
+            } else if(text == ""){
+                super.replace(fb, offset, 1, "", attrs);
+            }
+            else{
+                Toolkit.getDefaultToolkit().beep();
+            }
     }
 
 }

@@ -172,6 +172,7 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
             tskAdd.txtTableNames.setText(displaylist);
             tskAdd.tableSelector.setModel(new DefaultComboBoxModel(tableList.toArray()));
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -187,7 +188,7 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
         jLabel1 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        txtStatus = new JTextField("N");
+        txtStatus = new JTextField("");
         ((AbstractDocument)txtStatus.getDocument()).setDocumentFilter(new LimitedDocFilter(Pattern.compile("^[YNyn]$"), 1));
         pnlButtons = new javax.swing.JPanel();
         pnlNav = new javax.swing.JPanel();
@@ -213,7 +214,7 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
 
         pnlInput.setLayout(new java.awt.GridLayout(3, 2, 5, 5));
 
-        btnAddList.setText("Add/Remove List");
+        btnAddList.setText("Open List Selector");
         btnAddList.setToolTipText("Add a task list.");
         btnAddList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -233,6 +234,11 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
         pnlInput.add(jLabel2);
 
         txtStatus.setToolTipText("Status of the task (y for yes, n for no)");
+        txtStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStatusActionPerformed(evt);
+            }
+        });
         pnlInput.add(txtStatus);
 
         getContentPane().add(pnlInput, java.awt.BorderLayout.PAGE_START);
@@ -328,16 +334,18 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
 
         getContentPane().add(pnlInsert, java.awt.BorderLayout.SOUTH);
 
-        setSize(new java.awt.Dimension(345, 300));
+        setSize(new java.awt.Dimension(439, 300));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
+
         try {
             rs.first();
             displayResults();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnFirst: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnFirst: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No table selected");
         }
     }//GEN-LAST:event_btnFirstActionPerformed
 
@@ -350,7 +358,8 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
                 displayResults();
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnPrevious: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnPrevious: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No table selected");
         }
     }//GEN-LAST:event_btnPreviousActionPerformed
 
@@ -363,7 +372,8 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
                 displayResults();
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnNext: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnNext: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No table selected");
         }
     }//GEN-LAST:event_btnNextActionPerformed
 
@@ -372,7 +382,8 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
             rs.last();
             displayResults();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnLast: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnLast: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No table selected");
         }
     }//GEN-LAST:event_btnLastActionPerformed
 
@@ -383,7 +394,8 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
 
             rs.updateRow();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnUpdate: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnUpdate: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No task to update!");
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -402,11 +414,13 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
                 displayResults();
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnDelete: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnDelete: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No task to delete!");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        txtStatus.setText("");
         pnlButtons.setVisible(false);
         pnlInsert.setVisible(true);
         pack();
@@ -414,7 +428,8 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
             rs.moveToInsertRow();
             displayResults();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnNew: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnNew: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No table selected");
         }
     }//GEN-LAST:event_btnNewActionPerformed
 
@@ -428,7 +443,8 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
             rs = stmt.executeQuery("select * from " + addList);
             rs.last();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnInsert: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnInsert: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No table selected");
         } finally {
             pnlInsert.setVisible(false);
             pnlButtons.setVisible(true);
@@ -441,7 +457,7 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
         try {
             rs.moveToCurrentRow();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "btnCancel: " + ex.getMessage());
+            //JOptionPane.showMessageDialog(this, "btnCancel: " + ex.getMessage());
         } finally {
             pnlInsert.setVisible(false);
             pnlButtons.setVisible(true);
@@ -497,6 +513,10 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
 //        }
 
     }//GEN-LAST:event_btnAddListActionPerformed
+
+    private void txtStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStatusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -578,23 +598,32 @@ public class TaskManager extends javax.swing.JFrame implements WindowListener {
             createDBTable();
             getResultSet();
             displayResults();
+            boolean tableAdded = tskAdd.getTableAdded();
             tskAdd = null;
+            if(tableAdded == true && tskAdd == null){
+                tskAdd = new TaskAdder();
+                tskAdd.addWindowListener(this);
+                tskAdd.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                addList();
+                tskAdd.setVisible(true);
+            }
         }
+
         else if(tskAdd.getDeleteList().isEmpty() == false){
             removeList = tskAdd.getDeleteList();
             tablenames.remove(removeList);
             deleteDBTable();
             displayResults();
             tskAdd = null;
-            if (tskAdd == null){
-            tskAdd = new TaskAdder();
-            tskAdd.addWindowListener(this);
-            tskAdd.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            tskAdd.setVisible(true);
+                if (tskAdd == null){
+                tskAdd = new TaskAdder();
+                tskAdd.addWindowListener(this);
+                tskAdd.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                tskAdd.setVisible(true);
         }
-        else{
-            JOptionPane.showMessageDialog(null, "Window already open");
-        }
+            else{
+                JOptionPane.showMessageDialog(null, "Window already open");
+            }
         addList();
         }
         else
